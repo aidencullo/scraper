@@ -23,15 +23,15 @@ def uncomma(val):
 
 def process_ratings(data):
     global ratings
-    processResults(data, ratings)
+    process_results(data, ratings)
     ratings = list(map(unparen, ratings))
 
 def process_companies(data):
     global companies
-    processResults(data, companies)
+    process_results(data, companies)
     companies = list(map(uncomma, companies))
 
-def processResults(results_param, values):
+def process_results(results_param, values):
     if results_param is None:
         print("no results found")
     else:
@@ -57,11 +57,9 @@ def print_results():
     
 def write_to_file():
     f = open("dentists.csv", "a")
-    
     for company, rating in zip(companies, ratings):
         formatted_txt = "%s,%s\n" % (company, rating)
         f.write(formatted_txt)
-
     f.close()
 
 def read_file():
