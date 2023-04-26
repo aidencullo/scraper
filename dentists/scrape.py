@@ -57,6 +57,7 @@ def print_results():
     
 def write_to_file():
     f = open("dentists.csv", "a")
+    f.write("Companies, Ratings\n")
     for company, rating in zip(companies, ratings):
         formatted_txt = "%s,%s\n" % (company, rating)
         f.write(formatted_txt)
