@@ -3,20 +3,42 @@ from bs4 import BeautifulSoup
 
 URL = "https://www.opencare.com/dentists/chicago-il/"
 
-def printResults(results_param):
-    if results is None:
+companies = []
+ratings = []
+
+
+def unparen(val):
+    return val.replace('(','').replace(')','')  
+
+def processRatings(data):
+    global ratings
+    processResults(data, ratings)
+    ratings = map(unparen, ratings)
+
+def processCompanies(data):
+    processResults(data, companies)
+
+def processResults(results_param, values):
+    if results_param is None:
         print("no results found")
     else:
-        for job_element in results:
-            name = job_element.text
-            print(name, end="\n" * 1)
+        for job_element in results_param:
+            value = job_element.text
+            values.append(value)
 
-page = requests.get(URL)
+def scrape():
+    page = requests.get(URL)
+    soup = BeautifulSoup(page.content, "html.parser")
+    companies_raw = soup.find_all(class_="name")
+    ratings_raw = soup.find_all(class_="ml-5 text-muted")
+    processRatings(ratings_raw)
+    processCompanies(companies_raw)
 
-soup = BeautifulSoup(page.content, "html.parser")
+def printResults():
+    print(list(ratings))
+    print(list(companies))
 
-results = soup.find_all(class_="name")
-
-printResults(results)
+scrape()
+printResults()
 
 print("Scraping url : %s" % URL)
